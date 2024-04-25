@@ -16,6 +16,13 @@ public class Controller : MonoBehaviour
     [SerializeField]
     private Transform attackPoint;
 
+    private AudioSource attackAudio;
+
+    private void Awake()
+    {
+        attackAudio = GetComponent<AudioSource>();
+    }
+
     void Start()
     {
         currentAttackTime = attackTimer;
@@ -86,6 +93,7 @@ public class Controller : MonoBehaviour
 
                 Instantiate(playerBullet, attackPoint.position, Quaternion.identity);
 
+                attackAudio.Play();
             }
         }
     }
