@@ -12,6 +12,13 @@ public class BulletScipt : MonoBehaviour
     [HideInInspector]
     public bool isEnemyBullet = false;
 
+    public GameManager manager;
+
+    private void Awake()
+    {
+        manager = GameObject.Find("GameManager").GetComponent<GameManager>();
+    }
+
     void Start()
     {
         if (isEnemyBullet)
@@ -42,6 +49,7 @@ public class BulletScipt : MonoBehaviour
         if (collision.tag == "Bullet" || collision.tag == "Enemy")
         {
             gameObject.SetActive(false);
+            manager.getPoint();
         }
     }
 }

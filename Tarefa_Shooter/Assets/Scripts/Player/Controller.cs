@@ -5,7 +5,7 @@ using UnityEngine;
 public class Controller : MonoBehaviour
 {
     public float speed = 5f;
-    public float minY, maxY;
+    public float minY, maxY, minX, maxX;
 
     public float attackTimer = 0.35f;
     private float currentAttackTime;
@@ -18,9 +18,12 @@ public class Controller : MonoBehaviour
 
     private AudioSource attackAudio;
 
+    public GameManager manager;
+
     private void Awake()
     {
         attackAudio = GetComponent<AudioSource>();
+        manager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
     void Start()
@@ -63,6 +66,9 @@ public class Controller : MonoBehaviour
             Vector3 temp = transform.position;
             temp.x += speed * Time.deltaTime;
 
+            if (temp.x > maxX)
+                temp.x = maxX;
+
             transform.position = temp;
         }
 
@@ -70,6 +76,9 @@ public class Controller : MonoBehaviour
         {
             Vector3 temp = transform.position;
             temp.x -= speed * Time.deltaTime;
+
+            if (temp.x > maxX)
+                temp.x = maxX;
 
             transform.position = temp;
         }
@@ -95,6 +104,20 @@ public class Controller : MonoBehaviour
 
                 attackAudio.Play();
             }
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Enemy" || collision.tag == "Bullet")
+        {
+            manager.result.text = "Game Over";
+            manager.result.gameObject.SetActive(true);
+            this.gameObject.active = false;
+        }
+        else
+        {
+            return;
         }
     }
 }
